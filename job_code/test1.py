@@ -33,20 +33,20 @@ def handle_start_help(message):
 
         element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "div.search__results")))
-
         out_div = driver.find_elements(By.CSS_SELECTOR, 'div.search__results')
         in_ul = out_div[0].find_element(By.TAG_NAME,'ul')
         lis = in_ul.find_elements(By.TAG_NAME,'li')
         bot.send_message(message.chat.id, text='Walmart')
+        time.sleep(3)
         for i in lis:
             date = i.find_element(By.CLASS_NAME,'job-listing__created').text
-            if(int(str(today - datetime.strptime(date, "%m/%d/%y").date()).split(" ")[0])<3):
+            if(int(str(today - datetime.strptime(date, "%m/%d/%y").date()).split(" ")[0])<2):
                 link = i.find_element(By.CLASS_NAME,'job-listing__link').get_attribute('href')
                 bot.send_message(message.chat.id, text=link)
         time.sleep(end_delay)
 
         # driver.quit()
-    finally:
+    except:
         bot.send_message(message.chat.id, text='No jobs in Walmart or Error')
     #
     # IBM
@@ -97,7 +97,7 @@ def handle_start_help(message):
         time.sleep(end_delay)
 
         # driver.quit()
-    finally:
+    except:
         bot.send_message(message.chat.id, text='No jobs in IBM or Error')
 
     # Amazon
@@ -129,7 +129,7 @@ def handle_start_help(message):
         time.sleep(end_delay)
 
         # driver.quit()
-    finally:
+    except:
         bot.send_message(message.chat.id, text='No jobs in Amazon or Error')
 
     # Bloomberg
@@ -155,10 +155,41 @@ def handle_start_help(message):
                     # print(link)
         time.sleep(end_delay)
 
-        driver.quit()
-    finally:
+        # driver.quit()
+    except:
         bot.send_message(message.chat.id, text='No jobs in Bloomberg or Error')
-        driver.quit()
 
+
+    # Q2
+    try:
+        # PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
+        # driver = webdriver.Chrome(PATH)
+
+        driver.get('https://q2ebanking.wd5.myworkdayjobs.com/Q2?locations=0da4bb96663010308829a8dfd4e91994&locations'
+           '=3b54c7e3a94801ec9b86115c1c017e76&jobFamilies=8b86f00a4a2a0161c8f6dbdc0288ab6a&jobFamilies'
+           '=8b86f00a4a2a01e03cacfbdc0288b96a&jobFamilies=54838d87026b0142d4a0dd78070250f5')
+
+        element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div/div[3]/div/div/div[2]/section")))
+
+        out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[3]/div/div/div[2]/section')
+        lis = out_div.find_elements(By.CLASS_NAME, 'css-1q2dra3')
+
+        bot.send_message(message.chat.id, text='Q2')
+        if len(lis) > 0:
+            for i in lis:
+                days = i.find_element(By.XPATH, './div[3]/div/div/dl/dd').text.split(" ")[1]
+                if days != '30+':
+                    days = int(days)
+                    if days < 3:
+                        link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
+                        bot.send_message(message.chat.id, text=link)
+                        # print(link)
+        time.sleep(end_delay)
+
+        driver.quit()
+    except:
+        bot.send_message(message.chat.id, text='No jobs in Q2 or Error')
+        driver.quit()
 
 bot.infinity_polling()

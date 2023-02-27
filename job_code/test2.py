@@ -23,25 +23,33 @@ PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
 
 driver = webdriver.Chrome(PATH)
 
-driver.get('https://careers.bloomberg.com/job/search?el=Students+and+Recent+Graduates&lc=New+York')
+driver.get('https://q2ebanking.wd5.myworkdayjobs.com/Q2?locations=0da4bb96663010308829a8dfd4e91994&locations'
+           '=3b54c7e3a94801ec9b86115c1c017e76&jobFamilies=8b86f00a4a2a0161c8f6dbdc0288ab6a&jobFamilies'
+           '=8b86f00a4a2a01e03cacfbdc0288b96a&jobFamilies=54838d87026b0142d4a0dd78070250f5')
 #driver.get('https://www.amazon.jobs/en/job_categories/data-science?offset=0&result_limit=10&sort=relevant&country%5B%5D=USA&distanceType=Mi&radius=24km&latitude=&longitude=&loc_group_id=&loc_query=&base_query=&city=&country=&region=&county=&query_options=&')
 
-element = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "/html/body/div[7]/main/div/div[3]/div/div/div/div[2]/div[2]")))
-print('netx')
-out_div = driver.find_element(By.XPATH,'/html/body/div[7]/main/div/div[3]/div/div/div/div[2]/div[2]')
-lis = out_div.find_elements(By.CLASS_NAME,'job-results-section')
-print(lis)
+# element = WebDriverWait(driver, 10).until(
+#         EC.presence_of_element_located((By.XPATH, "/html/body/div[7]/main/div/div[3]/div/div/div/div[2]/div[2]")))
+# print('netx')
+time.sleep(4)
+
+out_div = driver.find_element(By.XPATH,'/html/body/div/div/div/div[3]/div/div/div[2]/section')
+lis = out_div.find_elements(By.CLASS_NAME,'css-1q2dra3')
+
 # /html/body/div[7]/main/div/div[3]/div/div/div/div[2]/div[2]
 # /html/body/div[7]/main/div/div[3]/div/div/div/div[2]/div[2]/div[1]/span[1]
 #bot.send_message(message.chat.id, text='IBM')
 if(len(lis)>0):
     for i in lis:
-        days = int(str(today - datetime.strptime('Aug 17, 2022', "%b %d, %Y").date()).split(" ")[0])
-        if(days < 3):
-            link = i.find_element(By.XPATH,'./div/a').get_attribute('href')
-            #bot.send_message(message.chat.id, text=link)
-            print(link)
-time.sleep(20)
+        days = (i.find_element(By.XPATH,'./div[3]/div/div/dl/dd').text).split(" ")[1]
+        if days != '30+':
+            days = int(days)
+            print(days)
+
+            if(days < 16):
+                link = i.find_element(By.XPATH,'./div[1]/div/div/h3/a').get_attribute('href')
+                #bot.send_message(message.chat.id, text=link)
+                print(link)
+time.sleep(5)
 driver.quit()
 
