@@ -24,47 +24,23 @@ PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
 driver = webdriver.Chrome(PATH)
 
 
-driver.get('https://q2ebanking.wd5.myworkdayjobs.com/Q2')
+
+driver.get('https://jobs.fidelity.com/job-search-results/?parent_category[]=Technology')
 
 element = WebDriverWait(driver, 10).until(
-    EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div/div[3]/div/div/div[2]/section")))
+    EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[2]/main/div/section/div/div/div/div/div[2]/div/div[2]/div[1]/div[5]")))
 time.sleep(2)
 
-out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[3]/div/div/div[2]/section')
-lis = out_div.find_elements(By.CLASS_NAME, 'css-1q2dra3')
+out_div = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/main/div/section/div/div/div/div/div[2]/div/div[2]/div[1]/div[5]')
+inner_div = out_div.find_element(By.XPATH,'./div[2]/div')
+lis = inner_div.find_elements(By.XPATH, './/*')
+#/html/body/div[1]/div[2]/main/div/section/div/div/div/div/div[2]/div/div[2]/div[1]/div[5]/div[2]/div/div[1]
+#/html/body/div[1]/div[2]/main/div/section/div/div/div/div/div[2]/div/div[2]/div[1]/div[5]/div[2]/div/div[1]/div/div[1]/div[2]/a
 
-page_out_div = driver.find_element(By.XPATH,'/html/body/div/div/div/div[3]/div/div/div[2]/section/div[2]')
-page_lis = page_out_div.find_elements(By.CLASS_NAME,'css-1j096s0')
-page_num = 1
-
-
-# bot.send_message(message.chat.id, text='Q2')
-
-while page_num <= len(page_lis):
-
-    page_num_button = page_lis[page_num - 1].find_element(By.XPATH, './button')
-    page_num_button.click()
-
-    time.sleep(5)
-
-    out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[3]/div/div/div[2]/section')
-    lis = out_div.find_elements(By.CLASS_NAME, 'css-1q2dra3')
-
-    # bot.send_message(message.chat.id, text='Dell')
-    if len(lis) > 0:
-        for i in lis:
-            days = i.find_element(By.XPATH, './div[3]/div/div/dl/dd').text.split(" ")[1]
-            if days == 'Today':
-                days = 0
-            if days != '30+':
-                days = int(days)
-                if days < 30:
-                    link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
-                    # bot.send_message(message.chat.id, text=link)
-                    print(link)
-    page_num = page_num + 1
-
+print(lis)
+for i in lis:
+    link = i.find_element(By.XPATH,'./div/div[1]/div[2]/a').get_attribute('href')
+    print(link)
 
 time.sleep(5)
 driver.quit()
-
