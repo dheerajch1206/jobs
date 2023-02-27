@@ -30,14 +30,14 @@ def handle_start_help(message):
     try:
         driver.get('https://careers.walmart.com/results?q=&page=1&sort=date&jobCategory=00000161-7bad-da32-a37b'
                    '-fbef5e390000&expand=department,brand,type,rate&type=jobs')  # opens the website
-
+        time.sleep(3)
         element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "div.search__results")))
         out_div = driver.find_elements(By.CSS_SELECTOR, 'div.search__results')
         in_ul = out_div[0].find_element(By.TAG_NAME,'ul')
         lis = in_ul.find_elements(By.TAG_NAME,'li')
         bot.send_message(message.chat.id, text='Walmart')
-        time.sleep(3)
+
         for i in lis:
             date = i.find_element(By.CLASS_NAME,'job-listing__created').text
             if(int(str(today - datetime.strptime(date, "%m/%d/%y").date()).split(" ")[0])<2):
@@ -64,30 +64,44 @@ def handle_start_help(message):
             EC.presence_of_element_located((By.CLASS_NAME, "bx--card__wrapper")))
         lis = driver.find_elements(By.CLASS_NAME, 'bx--card__wrapper')
         bot.send_message(message.chat.id, text='IBM')
-        garbage_links = ['https://www.ibm.com/careers/uk-en/search/?filters=primary_country:DZ,primary_country:AT,'
-                         'primary_country:BE,primary_country:BG,primary_country:HR,primary_country:CY,primary_country:CZ,'
-                         'primary_country:DK,primary_country:EG,primary_country:FI,primary_country:FR,primary_country:DE,'
-                         'primary_country:GH,primary_country:GR,primary_country:HU,primary_country:IE,primary_country:IL,'
-                         'primary_country:IT,primary_country:KE,primary_country:LV,primary_country:LT,primary_country:MA,'
-                         'primary_country:NL,primary_country:NG,primary_country:NO,primary_country:PK,primary_country:PL,'
-                         'primary_country:PT,primary_country:QA,primary_country:RO,primary_country:SA,primary_country:RS,'
-                         'primary_country:SK,primary_country:SI,primary_country:ZA,primary_country:ES,primary_country:SE,'
-                         'primary_country:CH,primary_country:TN,primary_country:TR,primary_country:AE,primary_country:GB,'
-                         'department:Data%20%26%20Analytics,level:Entry%20Level',
-                         'https://www.ibm.com/careers/cn-zh/search/?filters=primary_country:CN,primary_country:HK,'
+        garbage_links = ['https://www.ibm.com/careers/cn-zh/search/?filters=primary_country:CN,primary_country:HK,'
                          'primary_country:TW,department:Data%20%26%20Analytics,level:Entry%20Level',
                          'https://www.ibm.com/careers/br-pt/search/?filters=primary_country:AR,primary_country:BR,'
-                         'primary_country:CL,primary_country:CO,primary_country:CR,primary_country:EC,primary_country:MX,'
-                         'primary_country:PE,primary_country:UY,primary_country:VE,department:Data%20%26%20Analytics,'
-                         'level:Entry%20Level',
+                         'primary_country:CL,primary_country:CO,primary_country:CR,primary_country:EC,'
+                         'primary_country:MX,primary_country:PE,primary_country:UY,primary_country:VE,'
+                         'department:Data%20%26%20Analytics,level:Entry%20Level',
                          'https://www.ibm.com/careers/ph-en/search/?filters=primary_country:AU,primary_country:ID,'
-                         'primary_country:JP,primary_country:MY,primary_country:NZ,primary_country:PH,primary_country:SG,'
-                         'primary_country:KR,primary_country:TH,primary_country:VN,department:Data%20%26%20Analytics,'
-                         'level:Entry%20Level',
+                         'primary_country:JP,primary_country:MY,primary_country:NZ,primary_country:PH,'
+                         'primary_country:SG,primary_country:KR,primary_country:TH,primary_country:VN,'
+                         'department:Data%20%26%20Analytics,level:Entry%20Level',
                          'https://www.ibm.com/careers/in-en/search/?filters=primary_country:BD,primary_country:IN,'
                          'primary_country:LK,department:Data%20%26%20Analytics,level:Entry%20Level',
                          'https://www.ibm.com/careers/us-en/search/?filters=primary_country:CA,primary_country:US,'
-                         'department:Data%20%26%20Analytics,level:Entry%20Level']
+                         'department:Data%20%26%20Analytics,level:Entry%20Level',
+                         'https://www.ibm.com/careers/uk-en/search/?filters=primary_country:DZ,primary_country:AT,'
+                         'primary_country:BE,primary_country:BG,primary_country:HR,primary_country:CY,'
+                         'primary_country:CZ,primary_country:DK,primary_country:EG,primary_country:FI,'
+                         'primary_country:FR,primary_country:DE,primary_country:GH,primary_country:GR,'
+                         'primary_country:HU,primary_country:IE,primary_country:IL,primary_country:IT,'
+                         'primary_country:KE,primary_country:LV,primary_country:LT,primary_country:MA,'
+                         'primary_country:NL,primary_country:NG,primary_country:NO,primary_country:PK,'
+                         'primary_country:PL,primary_country:PT,primary_country:QA,primary_country:RO,'
+                         'primary_country:SA,primary_country:RS,primary_country:SK,primary_country:SI,'
+                         'primary_country:ZA,primary_country:ES,primary_country:SE,primary_country:CH,'
+                         'primary_country:TN,primary_country:TR,primary_country:AE,primary_country:GB,'
+                         'department:Data%20%26%20Analytics,level:Entry%20Level',
+                         'https://www.ibm.com/careers/uk-en/search/?filters=primary_country:DZ,primary_country:AT,'
+                         'primary_country:BE,primary_country:BG,primary_country:HR,primary_country:CY,'
+                         'primary_country:CZ,primary_country:DK,primary_country:EG,primary_country:FI,'
+                         'primary_country:FR,primary_country:DE,primary_country:GH,primary_country:GR,'
+                         'primary_country:HU,primary_country:IE,primary_country:IL,primary_country:IT,'
+                         'primary_country:KE,primary_country:LV,primary_country:LT,primary_country:MA,'
+                         'primary_country:NL,primary_country:NG,primary_country:NO,primary_country:PK,'
+                         'primary_country:PL,primary_country:PT,primary_country:QA,primary_country:RO,'
+                         'primary_country:SA,primary_country:RS,primary_country:SK,primary_country:SI,'
+                         'primary_country:ZA,primary_country:ES,primary_country:SE,primary_country:CH,'
+                         'primary_country:TN,primary_country:TR,primary_country:AE,primary_country:GB'
+                         ]
         if len(lis) > 0:
             for i in lis:
                 link = i.find_element(By.XPATH, './div/a').get_attribute('href')
@@ -148,7 +162,8 @@ def handle_start_help(message):
         bot.send_message(message.chat.id, text='Bloomberg')
         if len(lis) > 0:
             for i in lis:
-                days = int(str(today - datetime.strptime('Aug 17, 2022', "%b %d, %Y").date()).split(" ")[0])
+                date = i.find_element(By.XPATH, './span[1]').text
+                days = int(str(today - datetime.strptime(date, "%b %d, %Y").date()).split(" ")[0])
                 if days < 3:
                     link = i.find_element(By.XPATH, './div/a').get_attribute('href')
                     bot.send_message(message.chat.id, text=link)
@@ -166,11 +181,12 @@ def handle_start_help(message):
         # driver = webdriver.Chrome(PATH)
 
         driver.get('https://q2ebanking.wd5.myworkdayjobs.com/Q2?locations=0da4bb96663010308829a8dfd4e91994&locations'
-           '=3b54c7e3a94801ec9b86115c1c017e76&jobFamilies=8b86f00a4a2a0161c8f6dbdc0288ab6a&jobFamilies'
-           '=8b86f00a4a2a01e03cacfbdc0288b96a&jobFamilies=54838d87026b0142d4a0dd78070250f5')
+                   '=3b54c7e3a94801ec9b86115c1c017e76&jobFamilies=8b86f00a4a2a0161c8f6dbdc0288ab6a&jobFamilies'
+                   '=8b86f00a4a2a01e03cacfbdc0288b96a&jobFamilies=54838d87026b0142d4a0dd78070250f5')
 
         element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div/div[3]/div/div/div[2]/section")))
+        time.sleep(2)
 
         out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[3]/div/div/div[2]/section')
         lis = out_div.find_elements(By.CLASS_NAME, 'css-1q2dra3')
@@ -179,6 +195,41 @@ def handle_start_help(message):
         if len(lis) > 0:
             for i in lis:
                 days = i.find_element(By.XPATH, './div[3]/div/div/dl/dd').text.split(" ")[1]
+                if days == 'Today':
+                    days = 0
+                if days != '30+':
+                    days = int(days)
+                    if days < 3:
+                        link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
+                        bot.send_message(message.chat.id, text=link)
+                        # print(link)
+        time.sleep(end_delay)
+
+        # driver.quit()
+    except:
+        bot.send_message(message.chat.id, text='No jobs in Q2 or Error')
+
+    # Dell Workday
+    try:
+        # PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
+        # driver = webdriver.Chrome(PATH)
+
+        driver.get(
+            'https://dell.wd1.myworkdayjobs.com/en-US/External?Location_Country=bc33aa3152ec42d4995f4791a106ed09')
+
+        element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div/div[3]/div/div/div[2]/section")))
+        time.sleep(2)
+
+        out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[3]/div/div/div[2]/section')
+        lis = out_div.find_elements(By.CLASS_NAME, 'css-1q2dra3')
+
+        bot.send_message(message.chat.id, text='Dell')
+        if len(lis) > 0:
+            for i in lis:
+                days = i.find_element(By.XPATH, './div[3]/div/div/dl/dd').text.split(" ")[1]
+                if days == 'Today':
+                    days = 0
                 if days != '30+':
                     days = int(days)
                     if days < 3:
@@ -191,5 +242,4 @@ def handle_start_help(message):
     except:
         bot.send_message(message.chat.id, text='No jobs in Q2 or Error')
         driver.quit()
-
 bot.infinity_polling()
