@@ -40,7 +40,10 @@ def handle_start_help(message):
 
         for i in lis:
             date = i.find_element(By.CLASS_NAME,'job-listing__created').text
-            if(int(str(today - datetime.strptime(date, "%m/%d/%y").date()).split(" ")[0])<2):
+            days = str(today - datetime.strptime(date, "%m/%d/%y").date()).split(" ")[0]
+            if days == '0:00:00':
+                days =0
+            if(int(days)<2):
                 link = i.find_element(By.CLASS_NAME,'job-listing__link').get_attribute('href')
                 bot.send_message(message.chat.id, text=link)
         time.sleep(end_delay)
@@ -307,7 +310,7 @@ def handle_start_help(message):
                         days = 0
                     if days != '30+':
                         days = int(days)
-                        if days < 30:
+                        if days < 3:
                             link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
                             bot.send_message(message.chat.id, text=link)
                             # print(link)
