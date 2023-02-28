@@ -22,14 +22,18 @@ d3 = today.strftime("%m/%d/%y")
 
 end_delay = 5
 
+not_interested_roles = ['senior', 'principle', 'Executive', 'sr.', 'staff']
+
 @bot.message_handler(commands=['start', 'help'])
 def handle_start_help(message):
     # Walmart
     PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver" # Path to chromedriver
     driver=webdriver.Chrome(PATH)
     try:
-        driver.get('https://careers.walmart.com/results?q=&page=1&sort=date&jobCategory=00000161-7bad-da32-a37b'
-                   '-fbef5e390000&expand=department,brand,type,rate&type=jobs')  # opens the website
+        driver.get('https://careers.walmart.com/results?q=Data%20Analytics&page=1&sort=date&jobCategory=00000161-7bad'
+                   '-da32-a37b-fbef5e390000,00000159-7627-d286-a3f9-7ea7d10c0000&expand=department,'
+                   '0000015e-b97d-d143-af5e-bd7da8ca0000,00000159-7574-d286-a3f9-7ff45f640000,brand,type,'
+                   'rate&type=jobs')  # opens the website
         time.sleep(3)
         element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "div.search__results")))
@@ -42,9 +46,10 @@ def handle_start_help(message):
             date = i.find_element(By.CLASS_NAME,'job-listing__created').text
             days = str(today - datetime.strptime(date, "%m/%d/%y").date()).split(" ")[0]
             if days == '0:00:00':
-                days =0
-            if(int(days)<2):
+                days = 0
+            if int(days) < 2:
                 link = i.find_element(By.CLASS_NAME,'job-listing__link').get_attribute('href')
+                desc = i.find_element(By.CLASS_NAME,'job-listing__link').text.lower()
                 bot.send_message(message.chat.id, text=link)
         time.sleep(end_delay)
 
