@@ -183,7 +183,7 @@ def handle_start_help(message):
         bot.send_message(message.chat.id, text='No jobs in Bloomberg or Error')
 
 
-    # Q2
+    # Q2 Workday
     try:
         # PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
         # driver = webdriver.Chrome(PATH)
@@ -334,6 +334,59 @@ def handle_start_help(message):
     except:
         bot.send_message(message.chat.id, text='No jobs in Salesforce or Error')
 
+    # Fractal Analytics Workday
+    try:
+        # PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
+        # driver = webdriver.Chrome(PATH)
+
+        driver.get(
+            'https://fractal.wd1.myworkdayjobs.com/en-US/Careers?locations=4fedd31659ec01018833777a30190000&locations'
+            '=4fedd31659ec0101883361ab95b30000&locations=4fedd31659ec010188338b7607d90000&locations'
+            '=4fedd31659ec010188338394e39e0000&locations=4fedd31659ec0101883389a4705c0000&locations'
+            '=4fedd31659ec0101883384cb0be80000')
+
+        element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div/div[4]/div/div/div[2]/section")))
+        time.sleep(2)
+
+        # bot.send_message(message.chat.id, text='Salesforce')
+
+        page_out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[4]/div/div/div[2]/section/div[2]')
+        page_lis = page_out_div.find_elements(By.CLASS_NAME, 'css-1j096s0')
+        page_num = 1
+
+        while page_num <= len(page_lis):
+
+            page_num_button = page_lis[page_num - 1].find_element(By.XPATH, './button')
+            page_num_button.click()
+
+            time.sleep(5)
+
+            out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[4]/div/div/div[2]/section')
+            lis = out_div.find_elements(By.CLASS_NAME, 'css-1q2dra3')
+            print(lis)
+            if len(lis) > 0:
+                for i in lis:
+                    days = i.find_element(By.XPATH, './div[3]/div/div/dl/dd').text.split(" ")[1]
+                    if days == 'Today':
+                        days = 0
+                    elif days == 'Yesterday':
+                        days = 1
+                    if days != '30+':
+                        days = int(days)
+                        if days < 3:
+                            link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
+                            bot.send_message(message.chat.id, text=link)
+                            # print(link)
+
+            page_num = page_num + 1
+
+        time.sleep(end_delay)
+
+        # driver.quit()
+    except:
+        bot.send_message(message.chat.id, text='No jobs in Fractal Analytics or Error')
+
     # Tiger Analytics
     try:
         # PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
@@ -352,16 +405,16 @@ def handle_start_help(message):
         for i in lis:
             date = i.find_element(By.CLASS_NAME, 'whr-date').text.split(" ")[2]
             days = int(str(today - datetime.strptime(date, "%Y-%m-%d").date()).split(" ")[0])
-            print(days)
-            if days < 30:
+            # print(days)
+            if days < 3:
                 link = i.find_element(By.XPATH, './h3/a').get_attribute('href')
                 bot.send_message(message.chat.id, text=link)
-                print(link)
+                # print(link)
 
         time.sleep(end_delay)
 
         driver.quit()
     except:
-        bot.send_message(message.chat.id, text='No jobs in Salesforce or Error')
+        bot.send_message(message.chat.id, text='No jobs in Tiger Analytics or Error')
         driver.quit()
 bot.infinity_polling()
