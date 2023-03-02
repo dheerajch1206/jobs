@@ -217,6 +217,8 @@ def handle_start_help(message):
                     days = i.find_element(By.XPATH, './div[3]/div/div/dl/dd').text.split(" ")[1]
                     if days == 'Today':
                         days = 0
+                    elif days == 'Yesterday':
+                        days = 1
                     if days != '30+':
                         days = int(days)
                         if days < 3:
@@ -265,6 +267,8 @@ def handle_start_help(message):
                     days = i.find_element(By.XPATH, './div[3]/div/div/dl/dd').text.split(" ")[1]
                     if days == 'Today':
                         days = 0
+                    elif days == 'Yesterday':
+                        days = 1
                     if days != '30+':
                         days = int(days)
                         if days < 3:
@@ -313,6 +317,8 @@ def handle_start_help(message):
                     days = i.find_element(By.XPATH, './div[3]/div/div/dl/dd').text.split(" ")[1]
                     if days == 'Today':
                         days = 0
+                    elif days == 'Yesterday':
+                        days = 1
                     if days != '30+':
                         days = int(days)
                         if days < 3:
