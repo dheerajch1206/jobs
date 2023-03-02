@@ -330,9 +330,38 @@ def handle_start_help(message):
 
         time.sleep(end_delay)
 
+        # driver.quit()
+    except:
+        bot.send_message(message.chat.id, text='No jobs in Salesforce or Error')
+
+    # Tiger Analytics
+    try:
+        # PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
+        # driver = webdriver.Chrome(PATH)
+
+        driver.get(
+            'https://www.tigeranalytics.com/current-openings/#us')
+
+        element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "whr-item")))
+
+        bot.send_message(message.chat.id, text='Tiger Analytics')
+
+        lis = driver.find_elements(By.CLASS_NAME, 'whr-item')
+
+        for i in lis:
+            date = i.find_element(By.CLASS_NAME, 'whr-date').text.split(" ")[2]
+            days = int(str(today - datetime.strptime(date, "%Y-%m-%d").date()).split(" ")[0])
+            print(days)
+            if days < 30:
+                link = i.find_element(By.XPATH, './h3/a').get_attribute('href')
+                bot.send_message(message.chat.id, text=link)
+                print(link)
+
+        time.sleep(end_delay)
+
         driver.quit()
     except:
         bot.send_message(message.chat.id, text='No jobs in Salesforce or Error')
         driver.quit()
-
 bot.infinity_polling()
