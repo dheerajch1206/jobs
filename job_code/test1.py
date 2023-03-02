@@ -192,40 +192,9 @@ def handle_start_help(message):
                    '=3b54c7e3a94801ec9b86115c1c017e76&jobFamilies=8b86f00a4a2a0161c8f6dbdc0288ab6a&jobFamilies'
                    '=8b86f00a4a2a01e03cacfbdc0288b96a&jobFamilies=54838d87026b0142d4a0dd78070250f5')
 
-        element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div/div[3]/div/div/div[2]/section")))
-        time.sleep(2)
-
-        page_out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[3]/div/div/div[2]/section/div[2]')
-        page_lis = page_out_div.find_elements(By.CLASS_NAME, 'css-1j096s0')
-        page_num = 1
-
         bot.send_message(message.chat.id, text='Q2')
 
-        while page_num <= len(page_lis):
-
-            page_num_button = page_lis[page_num - 1].find_element(By.XPATH, './button')
-            page_num_button.click()
-
-            time.sleep(5)
-
-            out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[3]/div/div/div[2]/section')
-            lis = out_div.find_elements(By.CLASS_NAME, 'css-1q2dra3')
-
-            if len(lis) > 0:
-                for i in lis:
-                    days = i.find_element(By.XPATH, './div[3]/div/div/dl/dd').text.split(" ")[1]
-                    if days == 'Today':
-                        days = 0
-                    elif days == 'Yesterday':
-                        days = 1
-                    if days != '30+':
-                        days = int(days)
-                        if days < 3:
-                            link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
-                            bot.send_message(message.chat.id, text=link)
-                            # print(link)
-            page_num = page_num + 1
+        links = workday(driver, message)
 
         time.sleep(end_delay)
 
@@ -238,45 +207,11 @@ def handle_start_help(message):
         # PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
         # driver = webdriver.Chrome(PATH)
 
-        driver.get(
-            'https://dell.wd1.myworkdayjobs.com/en-US/External?Location_Country=bc33aa3152ec42d4995f4791a106ed09')
-
-        element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div/div[3]/div/div/div[2]/section")))
-        time.sleep(2)
+        driver.get('https://dell.wd1.myworkdayjobs.com/en-US/External?Location_Country=bc33aa3152ec42d4995f4791a106ed09')
 
         bot.send_message(message.chat.id, text='Dell')
 
-        page_out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[3]/div/div/div[2]/section/div[2]')
-        page_lis = page_out_div.find_elements(By.CLASS_NAME, 'css-1j096s0')
-        page_num = 1
-
-
-        while page_num <= len(page_lis):
-
-            page_num_button = page_lis[page_num - 1].find_element(By.XPATH, './button')
-            page_num_button.click()
-
-            time.sleep(5)
-
-            out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[3]/div/div/div[2]/section')
-            lis = out_div.find_elements(By.CLASS_NAME, 'css-1q2dra3')
-
-            if len(lis) > 0:
-                for i in lis:
-                    days = i.find_element(By.XPATH, './div[3]/div/div/dl/dd').text.split(" ")[1]
-                    if days == 'Today':
-                        days = 0
-                    elif days == 'Yesterday':
-                        days = 1
-                    if days != '30+':
-                        days = int(days)
-                        if days < 3:
-                            link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
-                            bot.send_message(message.chat.id, text=link)
-                            # print(link)
-
-            page_num = page_num + 1
+        links = workday(driver,message)
 
         time.sleep(end_delay)
 
@@ -289,45 +224,11 @@ def handle_start_help(message):
         # PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
         # driver = webdriver.Chrome(PATH)
 
-        driver.get('https://salesforce.wd1.myworkdayjobs.com/en-US/External_Career_Site?Location_Country'
-                   '=bc33aa3152ec42d4995f4791a106ed09&jobFamilyGroup=79e9552bbdbe454a8e1dbdd652b00e38')
-
-        element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div/div[3]/div/div/div[2]/section")))
-        time.sleep(2)
+        driver.get('https://salesforce.wd1.myworkdayjobs.com/en-US/External_Career_Site?Location_Country' 
+               '=bc33aa3152ec42d4995f4791a106ed09&jobFamilyGroup=79e9552bbdbe454a8e1dbdd652b00e38 ')
 
         bot.send_message(message.chat.id, text='Salesforce')
-
-        page_out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[3]/div/div/div[2]/section/div[2]')
-        page_lis = page_out_div.find_elements(By.CLASS_NAME, 'css-1j096s0')
-        page_num = 1
-
-        while page_num <= len(page_lis):
-
-            page_num_button = page_lis[page_num - 1].find_element(By.XPATH, './button')
-            page_num_button.click()
-
-            time.sleep(5)
-
-            out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[3]/div/div/div[2]/section')
-            lis = out_div.find_elements(By.CLASS_NAME, 'css-1q2dra3')
-
-            if len(lis) > 0:
-                for i in lis:
-                    days = i.find_element(By.XPATH, './div[3]/div/div/dl/dd').text.split(" ")[1]
-                    if days == 'Today':
-                        days = 0
-                    elif days == 'Yesterday':
-                        days = 1
-                    if days != '30+':
-                        days = int(days)
-                        if days < 3:
-                            link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
-                            bot.send_message(message.chat.id, text=link)
-                            # print(link)
-
-            page_num = page_num + 1
-
+        links = workday(driver,message)
         time.sleep(end_delay)
 
         # driver.quit()
@@ -417,4 +318,43 @@ def handle_start_help(message):
     except:
         bot.send_message(message.chat.id, text='No jobs in Tiger Analytics or Error')
         driver.quit()
+
+
+def workday(driver,message):
+
+    element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div/div[3]/div/div/div[2]/section")))
+    time.sleep(2)
+
+    page_out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[3]/div/div/div[2]/section/div[2]')
+    page_lis = page_out_div.find_elements(By.CLASS_NAME, 'css-1j096s0')
+    page_num = 1
+
+    while page_num <= len(page_lis):
+
+        page_num_button = page_lis[page_num - 1].find_element(By.XPATH, './button')
+        page_num_button.click()
+
+        time.sleep(5)
+
+        out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[3]/div/div/div[2]/section')
+        lis = out_div.find_elements(By.CLASS_NAME, 'css-1q2dra3')
+        links = []
+        if len(lis) > 0:
+            for i in lis:
+                days = i.find_element(By.XPATH, './div[3]/div/div/dl/dd').text.split(" ")[1]
+                if days == 'Today':
+                    days = 0
+                elif days == 'Yesterday':
+                    days = 1
+                if days != '30+':
+                    days = int(days)
+                    if days < 3:
+                        link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
+                        bot.send_message(message.chat.id, text=link)
+                        # print(link)
+
+        page_num = page_num + 1
+
+
 bot.infinity_polling()
