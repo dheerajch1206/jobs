@@ -130,9 +130,10 @@ def handle_start_help(message):
         # Software
         # driver.get('https://www.amazon.jobs/en/job_categories/software-development?offset=0&result_limit=10&sort=relevant&job_type%5B%5D=Full-Time&country%5B%5D=USA&distanceType=Mi&radius=24km&latitude=&longitude=&loc_group_id=&loc_query=&base_query=&city=&country=&region=&county=&query_options=&')
         # Data Science
-        driver.get('https://www.amazon.jobs/en/job_categories/data-science?offset=0&result_limit=10&sort=relevant'
-                   '&country%5B%5D=USA&distanceType=Mi&radius=24km&latitude=&longitude=&loc_group_id=&loc_query'
-                   '=&base_query=&city=&country=&region=&county=&query_options=&')
+        driver.get('https://www.amazon.jobs/en/search?offset=0&result_limit=10&sort=relevant&category%5B%5D=data'
+                   '-science&category%5B%5D=database-administration&category%5B%5D=business-intelligence&category%5B'
+                   '%5D=machine-learning-science&country%5B%5D=USA&distanceType=Mi&radius=24km&latitude=&longitude'
+                   '=&loc_group_id=&loc_query=&base_query=&city=&country=&region=&county=&query_options=&')
 
         element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "job-tile")))
@@ -142,7 +143,7 @@ def handle_start_help(message):
         if len(lis) > 0:
             for i in lis:
                 update = i.find_element(By.XPATH, './a/div/div[1]/div[2]/p').text
-                if 'days' in update.split(" "):
+                if 'day' in update.split(" "):
                     days = int(update.split(" ")[1])
                     if days < 3:
                         link = i.find_element(By.XPATH, './a').get_attribute('href')
