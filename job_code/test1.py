@@ -250,7 +250,7 @@ def handle_start_help(message):
             EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div/div[4]/div/div/div[2]/section")))
         time.sleep(2)
 
-        # bot.send_message(message.chat.id, text='Salesforce')
+        bot.send_message(message.chat.id, text='Fractal Analytics')
 
         page_out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[4]/div/div/div[2]/section/div[2]')
         page_lis = page_out_div.find_elements(By.CLASS_NAME, 'css-1j096s0')
@@ -265,7 +265,7 @@ def handle_start_help(message):
 
             out_div = driver.find_element(By.XPATH, '/html/body/div/div/div/div[4]/div/div/div[2]/section')
             lis = out_div.find_elements(By.CLASS_NAME, 'css-1q2dra3')
-            print(lis)
+            # print(lis)
             if len(lis) > 0:
                 for i in lis:
                     days = i.find_element(By.XPATH, './div[3]/div/div/dl/dd').text.split(" ")[1]
@@ -314,9 +314,81 @@ def handle_start_help(message):
 
         time.sleep(end_delay)
 
-        driver.quit()
+        # driver.quit()
     except:
         bot.send_message(message.chat.id, text='No jobs in Tiger Analytics or Error')
+
+    # CVS
+
+    try:
+
+        # PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
+        # driver = webdriver.Chrome(PATH)
+
+        driver.get('https://jobs.cvshealth.com/job-search-results/?addtnl_categories[]=Analytics&addtnl_categories[]=Business%20Analyst&addtnl_categories[]=Data%20Engineering&addtnl_categories[]=Enterprise%20Analytics&addtnl_categories[]=Health%20Care%20Analytics&location=United%20States&country=US&radius=25')
+
+        bot.send_message(message.chat.id, text='CVS')
+
+        element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "pagination-li")))
+
+        cokkie_element = driver.find_element(By.CSS_SELECTOR, 'div.cookie-notice-container')
+        cokkie_element.find_element(By.XPATH, './a').click()
+
+        with open("cvs_job_id.txt") as f:
+            old_job_id = f.readlines()
+        old_job_id = [x.strip() for x in old_job_id]  # remove new line characters
+        # print(old_job_id)
+        # old_job_id = []
+
+        new_job_id = []
+
+        page_num = 1
+
+        while True:
+            time.sleep(2)
+            element = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH,"/html/body/div[1]/div[2]/main/div/section/div/div/div[2]/div/div[2]/div/div/div[1]/div[5]/div[2]")))
+            element = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.CLASS_NAME, "pagination-li")))
+            page_lis = driver.find_elements(By.CLASS_NAME, 'pagination-li')
+
+            out_div = driver.find_element(By.XPATH,'/html/body/div[1]/div[2]/main/div/section/div/div/div[2]/div/div[2]/div/div/div[1]/div[5]/div[2]')
+            lis = out_div.find_elements(By.XPATH, './div/*')
+
+            for i in lis:
+                job_id = i.find_element(By.XPATH, "./div/div[2]").text
+                # print(job_id)
+                new_job_id.append(job_id)
+                if job_id not in old_job_id:
+                    link = i.find_element(By.XPATH, './div/span[5]/a').get_attribute('href')
+                    bot.send_message(message.chat.id, text=link)
+                    # print(link)
+            flag = 0
+            for x in page_lis:
+                txt = x.find_element(By.XPATH, './a').text
+                # print(txt)
+                if (txt not in ["<<", "<", ">", ">>"]):
+                    if (int(txt) == page_num + 1):
+                        x.find_element(By.XPATH, './a').click()
+                        page_num = page_num + 1
+                        flag = 1
+                        break
+            if flag == 0:
+                break
+
+        # open file in write mode
+        with open(r'cvs_job_id.txt', 'w') as fp:
+            for item in new_job_id:
+                # write each item on a new line
+                fp.write("%s\n" % item)
+            print('Done')
+
+        time.sleep(end_delay)
+        driver.quit()
+
+    except:
+        bot.send_message(message.chat.id, text='No jobs in CVS or Error')
         driver.quit()
 
 
