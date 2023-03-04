@@ -148,6 +148,9 @@ def handle_start_help(message):
                         link = i.find_element(By.XPATH, './a').get_attribute('href')
                         bot.send_message(message.chat.id, text=link)
                         # print(link)
+                elif 'hours' in update.split(" "):
+                    link = i.find_element(By.XPATH, './a').get_attribute('href')
+                    bot.send_message(message.chat.id, text=link)
         time.sleep(end_delay)
 
         # driver.quit()
