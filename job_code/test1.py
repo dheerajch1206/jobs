@@ -134,24 +134,50 @@ def handle_start_help(message):
                    '-science&category%5B%5D=database-administration&category%5B%5D=business-intelligence&category%5B'
                    '%5D=machine-learning-science&country%5B%5D=USA&distanceType=Mi&radius=24km&latitude=&longitude'
                    '=&loc_group_id=&loc_query=&base_query=&city=&country=&region=&county=&query_options=&')
-
-        element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "job-tile")))
-        lis = driver.find_elements(By.CLASS_NAME, 'job-tile')
-
         bot.send_message(message.chat.id, text='Amazon')
-        if len(lis) > 0:
-            for i in lis:
-                update = i.find_element(By.XPATH, './a/div/div[1]/div[2]/p').text
-                if 'day' in update.split(" "):
-                    days = int(update.split(" ")[1])
-                    if days < 3:
+        page_num = 1
+
+        while True:
+            time.sleep(2)
+            element = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.CLASS_NAME, "job-tile")))
+            element = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH,"/html/body/div[2]/div[1]/div[3]/div/div/div["
+                                                         "2]/content/div/div/div[2]/div[3]/div[1]/div/div")))
+
+            page_out_div = driver.find_element(By.XPATH,'/html/body/div[2]/div[1]/div[3]/div/div/div['
+                                                        '2]/content/div/div/div[2]/div[3]/div[1]/div/div')
+            page_lis = page_out_div.find_elements(By.XPATH, './*')
+
+            lis = driver.find_elements(By.CLASS_NAME, 'job-tile')
+
+            if len(lis) > 0:
+                for i in lis:
+                    update = i.find_element(By.XPATH, './a/div/div[1]/div[2]/p').text
+                    # print(update)
+                    if 'day' in update.split(" "):
+                        days = int(update.split(" ")[1])
+                        if days < 3:
+                            link = i.find_element(By.XPATH, './a').get_attribute('href')
+                            bot.send_message(message.chat.id, text=link)
+                            # print(link)
+                    elif 'hours' in update.split(" "):
                         link = i.find_element(By.XPATH, './a').get_attribute('href')
                         bot.send_message(message.chat.id, text=link)
                         # print(link)
-                elif 'hours' in update.split(" "):
-                    link = i.find_element(By.XPATH, './a').get_attribute('href')
-                    bot.send_message(message.chat.id, text=link)
+
+            flag = 0
+            for x in page_lis:
+                txt = x.text
+                # print(txt)
+                if (txt not in [""]):
+                    if (int(txt) == page_num + 1):
+                        x.click()
+                        page_num = page_num + 1
+                        flag = 1
+                        break
+            if flag == 0:
+                break
         time.sleep(end_delay)
 
         # driver.quit()
