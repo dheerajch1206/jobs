@@ -446,7 +446,7 @@ def handle_start_help(message):
         days = 0
 
         # Iterate through the pages untill the jobs are less than 2 days old
-        while days < 3:
+        while int(days) < 3:
             time.sleep(2)
             # Waits for loading page numbers and job llist
             element = WebDriverWait(driver, 10).until(
@@ -467,8 +467,10 @@ def handle_start_help(message):
             if len(lis) > 0:
                 for i in lis:
                     date = i.find_element(By.XPATH, './div/div[4]').text
-                    days = int(str(today - datetime.strptime(date, "%m/%d/%Y").date()).split(" ")[0])
-                    if days < 2:
+                    days = str(today - datetime.strptime(date, "%m/%d/%Y").date()).split(" ")[0]
+                    if days == '0:00:00':
+                        days = 0
+                    if int(days) < 2:
                         link = i.find_element(By.XPATH, './div/div[1]/div[2]/a').get_attribute('href')
                         bot.send_message(message.chat.id, text=link)
                         # print(link)
