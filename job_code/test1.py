@@ -56,6 +56,24 @@ def handle_start_help(message):
         # driver.quit()
     except:
         bot.send_message(message.chat.id, text='No jobs in Walmart or Error')
+
+    # Walmart Workday
+    try:
+        # PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
+        # driver = webdriver.Chrome(PATH)
+
+        driver.get('https://walmart.wd5.myworkdayjobs.com/WalmartExternal?jobFamilyGroup'
+                   '=e83ebdbd2a0a01af0185848948e94dc6&locationCountry=bc33aa3152ec42d4995f4791a106ed09'
+                   '&Management_Level=3110e91abc930181e556e10099e7850c&Management_Level'
+                   '=3110e91abc930151aec9d30399e7860c')
+
+        bot.send_message(message.chat.id, text='Walmart Workday')
+        links = workday(driver, message)
+        time.sleep(end_delay)
+
+        # driver.quit()
+    except:
+        bot.send_message(message.chat.id, text='No jobs in Walmart Workday or Error')
     #
     # IBM
     #
