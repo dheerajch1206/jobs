@@ -22,7 +22,7 @@ d3 = today.strftime("%m/%d/%y")
 
 end_delay = 5
 
-not_interested_roles = ['senior', 'principle', 'Executive', 'sr.', 'staff']
+not_interested_roles = [ 'principal', 'Executive', 'staff', 'director', 'software', 'devops', 'manager']
 
 @bot.message_handler(commands=['start', 'help'])
 def handle_start_help(message):
@@ -509,10 +509,48 @@ def handle_start_help(message):
 
         time.sleep(end_delay) # End delay
 
-        driver.quit()
+        # driver.quit()
 
     except:
         bot.send_message(message.chat.id, text='No jobs in Fidelity or Error')
+
+    # Veeva systems
+
+    try:
+        # PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
+        # driver = webdriver.Chrome(PATH)
+
+        # Opens the website
+        driver.get('https://careers.veeva.com/job-search-results/?primary_category[]=Engineering&primary_category[]=Analytics&store_id[]=USA')
+
+        bot.send_message(message.chat.id, text='Veeva Systems') # Sends company name to bot
+
+        element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH,"/html/body/div[2]/div[2]/main/div/section/div/div/div[2]/div/div[2]/div/div[2]/div[1]/div[5]/div[2]")))
+        time.sleep(2)
+
+        # Loading the list
+        out_div = driver.find_element(By.XPATH,'/html/body/div[2]/div[2]/main/div/section/div/div/div[2]/div/div[2]/div/div[2]/div[1]/div[5]/div[2]')
+        in_div = out_div.find_element(By.XPATH, './div')
+        lis = in_div.find_elements(By.XPATH, './*')
+
+        # not interested roles in veeva
+        not_interested_roles_veeva = not_interested_roles + ["ui architect", "performance engineer"]
+
+        if len(lis) > 0:
+            for i in lis:
+                link = i.find_element(By.XPATH, './div/div[1]/div[2]/a').get_attribute('href')
+                desc = i.find_element(By.XPATH, './div/div[1]/div[2]/a').text
+                desc_flag = [True for x in not_interested_roles_veeva if x in desc.lower()]
+                if not desc_flag:
+                    bot.send_message(message.chat.id, text=link)
+                    # print(link)
+        time.sleep(end_delay)  # End delay
+
+        driver.quit()
+
+    except:
+        bot.send_message(message.chat.id, text='No jobs in Veeva Systems or Error')
         driver.quit()
 
 def workday(driver,message):
