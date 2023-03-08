@@ -22,7 +22,7 @@ d3 = today.strftime("%m/%d/%y")
 
 end_delay = 5
 
-not_interested_roles = [ 'principal', 'Executive', 'staff', 'director', 'software', 'devops', 'manager']
+not_interested_roles = ['principal', 'Executive', 'staff', 'director', 'manager', 'president', 'lead', 'ux']
 
 @bot.message_handler(commands=['start', 'help'])
 def handle_start_help(message):
@@ -50,7 +50,8 @@ def handle_start_help(message):
             if int(days) < 2:
                 link = i.find_element(By.CLASS_NAME,'job-listing__link').get_attribute('href')
                 desc = i.find_element(By.CLASS_NAME,'job-listing__link').text.lower()
-                bot.send_message(message.chat.id, text=link)
+                if not any(x in desc.lower() for x in not_interested_roles):
+                    bot.send_message(message.chat.id, text=link)
         time.sleep(end_delay)
 
         # driver.quit()
@@ -129,7 +130,7 @@ def handle_start_help(message):
                          'https://www.ibm.com/careers/ja-jp/search/?filters=primary_country:AU,primary_country:ID,'
                          'primary_country:JP,primary_country:MY,primary_country:NZ,primary_country:PH,'
                          'primary_country:SG,primary_country:KR,primary_country:TH,primary_country:VN,'
-                         'department:Data%20%26%20Analytics,level:Entry%20Level '
+                         'department:Data%20%26%20Analytics,level:Entry%20Level'
                          ]
         if len(lis) > 0:
             for i in lis:
@@ -327,9 +328,11 @@ def handle_start_help(message):
                     if days != '30+':
                         days = int(days)
                         if days < 2:
-                            link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
-                            bot.send_message(message.chat.id, text=link)
-                            # print(link)
+                            desc = i.find_element(By.XPATH, './div[1]/div/div/h3/a').text
+                            if not any(x in desc.lower() for x in not_interested_roles):
+                                link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
+                                bot.send_message(message.chat.id, text=link)
+                                # print(link)
 
             page_num = page_num + 1
 
@@ -489,11 +492,13 @@ def handle_start_help(message):
                 for i in lis:
                     date = i.find_element(By.XPATH, './div/div[4]').text
                     days = str(today - datetime.strptime(date, "%m/%d/%Y").date()).split(" ")[0]
+                    desc = i.find_element(By.XPATH, './div/div[1]/div[2]/a').text
                     if days == '0:00:00':
                         days = 0
                     if int(days) < 2:
-                        link = i.find_element(By.XPATH, './div/div[1]/div[2]/a').get_attribute('href')
-                        bot.send_message(message.chat.id, text=link)
+                        if not any(x in desc.lower() for x in not_interested_roles):
+                            link = i.find_element(By.XPATH, './div/div[1]/div[2]/a').get_attribute('href')
+                            bot.send_message(message.chat.id, text=link)
                         # print(link)
 
             # Iterate through the pages
@@ -541,7 +546,7 @@ def handle_start_help(message):
         lis = in_div.find_elements(By.XPATH, './*')
 
         # not interested roles in veeva
-        not_interested_roles_veeva = not_interested_roles + ["ui architect", "performance engineer"]
+        not_interested_roles_veeva = not_interested_roles + ["ui architect", "performance engineer",'software', 'devops']
 
         if len(lis) > 0:
             for i in lis:
@@ -614,9 +619,11 @@ def workday(driver,message):
                 if days != '30+':
                     days = int(days)
                     if days < 3:
-                        link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
-                        bot.send_message(message.chat.id, text=link)
-                        # print(link)
+                        desc = i.find_element(By.XPATH, './div[1]/div/div/h3/a').text
+                        if not any(x in desc.lower() for x in not_interested_roles):
+                            link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
+                            bot.send_message(message.chat.id, text=link)
+                            # print(link)
 
         page_num = page_num + 1
 
