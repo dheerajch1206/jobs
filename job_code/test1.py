@@ -68,7 +68,6 @@ def handle_start_help(message):
                    '=3110e91abc930151aec9d30399e7860c')
 
         bot.send_message(message.chat.id, text='Walmart Workday')
-        links = workday(driver, message)
         time.sleep(end_delay)
 
         # driver.quit()
@@ -126,7 +125,11 @@ def handle_start_help(message):
                          'primary_country:PL,primary_country:PT,primary_country:QA,primary_country:RO,'
                          'primary_country:SA,primary_country:RS,primary_country:SK,primary_country:SI,'
                          'primary_country:ZA,primary_country:ES,primary_country:SE,primary_country:CH,'
-                         'primary_country:TN,primary_country:TR,primary_country:AE,primary_country:GB'
+                         'primary_country:TN,primary_country:TR,primary_country:AE,primary_country:GB',
+                         'https://www.ibm.com/careers/ja-jp/search/?filters=primary_country:AU,primary_country:ID,'
+                         'primary_country:JP,primary_country:MY,primary_country:NZ,primary_country:PH,'
+                         'primary_country:SG,primary_country:KR,primary_country:TH,primary_country:VN,'
+                         'department:Data%20%26%20Analytics,level:Entry%20Level '
                          ]
         if len(lis) > 0:
             for i in lis:
@@ -323,7 +326,7 @@ def handle_start_help(message):
                         days = 1
                     if days != '30+':
                         days = int(days)
-                        if days < 3:
+                        if days < 2:
                             link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
                             bot.send_message(message.chat.id, text=link)
                             # print(link)
@@ -521,16 +524,19 @@ def handle_start_help(message):
         # driver = webdriver.Chrome(PATH)
 
         # Opens the website
-        driver.get('https://careers.veeva.com/job-search-results/?primary_category[]=Engineering&primary_category[]=Analytics&store_id[]=USA')
+        driver.get('https://careers.veeva.com/job-search-results/?primary_category[]=Engineering&primary_category['
+                   ']=Analytics&store_id[]=USA')
 
         bot.send_message(message.chat.id, text='Veeva Systems') # Sends company name to bot
 
         element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH,"/html/body/div[2]/div[2]/main/div/section/div/div/div[2]/div/div[2]/div/div[2]/div[1]/div[5]/div[2]")))
+            EC.presence_of_element_located((By.XPATH,"/html/body/div[2]/div[2]/main/div/section/div/div/div["
+                                                     "2]/div/div[2]/div/div[2]/div[1]/div[5]/div[2]")))
         time.sleep(2)
 
         # Loading the list
-        out_div = driver.find_element(By.XPATH,'/html/body/div[2]/div[2]/main/div/section/div/div/div[2]/div/div[2]/div/div[2]/div[1]/div[5]/div[2]')
+        out_div = driver.find_element(By.XPATH,'/html/body/div[2]/div[2]/main/div/section/div/div/div[2]/div/div['
+                                               '2]/div/div[2]/div[1]/div[5]/div[2]')
         in_div = out_div.find_element(By.XPATH, './div')
         lis = in_div.find_elements(By.XPATH, './*')
 
@@ -547,11 +553,36 @@ def handle_start_help(message):
                     # print(link)
         time.sleep(end_delay)  # End delay
 
-        driver.quit()
+        # driver.quit()
 
     except:
         bot.send_message(message.chat.id, text='No jobs in Veeva Systems or Error')
+
+    # HP Workday
+    try:
+        # PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
+        # driver = webdriver.Chrome(PATH)
+
+        driver.get('https://hp.wd5.myworkdayjobs.com/en-US/ExternalCareerSite?jobFamilyGroup'
+                   '=80667f5f2da3010ee8417a74cf4b0000&primaryLocation=336ea9b27e9910b218bde597c1cae4b1'
+                   '&primaryLocation=336ea9b27e9910b21b37a49ec9e0725f&primaryLocation'
+                   '=336ea9b27e9910b217ab53dd5681a42e&primaryLocation=336ea9b27e9910b217693377d05b94b1'
+                   '&primaryLocation=b13b454d0dd401d06042e8aee55606df&primaryLocation'
+                   '=336ea9b27e9910b2181a3b76b70ec00d&primaryLocation=336ea9b27e9910b2183d59b62c3bc71f'
+                   '&primaryLocation=336ea9b27e9910b217873cdbde859b4d&primaryLocation'
+                   '=336ea9b27e9910b2174ae17110848eed&primaryLocation=5d264c5c066b01738fcee5d220195366'
+                   '&primaryLocation=5d264c5c066b012403c58bd220194566&primaryLocation'
+                   '=5d264c5c066b01cbe077a3d02019d565&primaryLocation=5d264c5c066b019422065fcd20191a65')
+
+        bot.send_message(message.chat.id, text='HP')
+        links = workday(driver, message)
+        time.sleep(end_delay)
+
         driver.quit()
+    except:
+        bot.send_message(message.chat.id, text='No jobs in HP or Error')
+        driver.quit()
+
 
 def workday(driver,message):
 
