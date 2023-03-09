@@ -580,14 +580,59 @@ def handle_start_help(message):
                    '=5d264c5c066b01cbe077a3d02019d565&primaryLocation=5d264c5c066b019422065fcd20191a65')
 
         bot.send_message(message.chat.id, text='HP')
-        links = workday(driver, message)
+
+        time.sleep(end_delay)
+
+        # driver.quit()
+    except:
+        bot.send_message(message.chat.id, text='No jobs in HP or Error')
+
+    # Tesla Workday
+    try:
+        # PATH = r"/Users/dheeraj/Desktop/jobs/chromedriver"  # Path to chromedriver
+        # driver = webdriver.Chrome(PATH)
+
+        driver.get('https://www.tesla.com/careers/search/?site=US&query=data')
+        time.sleep(5)
+
+        bot.send_message(message.chat.id, text='Tesla') # Sends the comapny name to bot
+
+        # Waits for loading page numbers and job llist
+        element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "/html/body/div/div/form/div/main/div/div/table/tbody")))
+
+        # Loads the job list
+        out_div = driver.find_element(By.XPATH, '/html/body/div/div/form/div/main/div/div/table/tbody')
+        lis = out_div.find_elements(By.XPATH, './*')
+
+        # Load the old job ids
+        with open("tesla_job_id.txt") as f:
+            old_job_id = f.readlines()
+        old_job_id = [x.strip() for x in old_job_id]  # remove new line characters
+        new_job_id = []
+
+        # iterate through the jobs
+        if len(lis) > 0:
+            for i in lis:
+                link = i.find_element(By.XPATH, './td/a').get_attribute('href')
+                job_id = link[-6:]
+                new_job_id.append(job_id)
+                if job_id not in old_job_id:
+                    bot.send_message(message.chat.id, text=link)
+                    # print(link)
+
+        # open file to write the new job ids
+        with open(r'tesla_job_id.txt', 'w') as fp:
+            for item in new_job_id:
+                # write each item on a new line
+                fp.write("%s\n" % item)
+
         time.sleep(end_delay)
 
         driver.quit()
     except:
-        bot.send_message(message.chat.id, text='No jobs in HP or Error')
+        bot.send_message(message.chat.id, text='No jobs in Tesla or Error')
         driver.quit()
-
 
 def workday(driver,message):
 
