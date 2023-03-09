@@ -597,6 +597,24 @@ def handle_start_help(message):
 
         bot.send_message(message.chat.id, text='Tesla') # Sends the comapny name to bot
 
+        SCROLL_PAUSE_TIME = 0.5
+
+        # Get scroll height
+        last_height = driver.execute_script("return document.body.scrollHeight")
+
+        while True:
+            # Scroll down to bottom
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+            # Wait to load page
+            time.sleep(SCROLL_PAUSE_TIME)
+
+            # Calculate new scroll height and compare with last scroll height
+            new_height = driver.execute_script("return document.body.scrollHeight")
+            if new_height == last_height:
+                break
+            last_height = new_height
+
         # Waits for loading page numbers and job llist
         element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "/html/body/div/div/form/div/main/div/div/table/tbody")))
