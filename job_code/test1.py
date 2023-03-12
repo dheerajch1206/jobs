@@ -69,6 +69,7 @@ def handle_start_help(message):
                    '=3110e91abc930151aec9d30399e7860c')
 
         bot.send_message(message.chat.id, text='Walmart Workday')
+        workday(driver, message)
         time.sleep(end_delay)
 
         # driver.quit()
@@ -246,7 +247,7 @@ def handle_start_help(message):
 
         bot.send_message(message.chat.id, text='Q2')
 
-        links = workday(driver, message)
+        workday(driver, message)
 
         time.sleep(end_delay)
 
@@ -263,7 +264,7 @@ def handle_start_help(message):
 
         bot.send_message(message.chat.id, text='Dell')
 
-        links = workday(driver,message)
+        workday(driver,message)
 
         time.sleep(end_delay)
 
@@ -280,7 +281,7 @@ def handle_start_help(message):
                '=bc33aa3152ec42d4995f4791a106ed09&jobFamilyGroup=79e9552bbdbe454a8e1dbdd652b00e38 ')
 
         bot.send_message(message.chat.id, text='Salesforce')
-        links = workday(driver,message)
+        workday(driver,message)
         time.sleep(end_delay)
 
         # driver.quit()
@@ -580,7 +581,7 @@ def handle_start_help(message):
                    '=5d264c5c066b01cbe077a3d02019d565&primaryLocation=5d264c5c066b019422065fcd20191a65')
 
         bot.send_message(message.chat.id, text='HP')
-
+        workday(driver, message)
         time.sleep(end_delay)
 
         # driver.quit()
@@ -681,7 +682,7 @@ def workday(driver,message):
                     days = 1
                 if days != '30+':
                     days = int(days)
-                    if days < 3:
+                    if days < 2:
                         desc = i.find_element(By.XPATH, './div[1]/div/div/h3/a').text
                         if not any(x in desc.lower() for x in not_interested_roles):
                             link = i.find_element(By.XPATH, './div[1]/div/div/h3/a').get_attribute('href')
